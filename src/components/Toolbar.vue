@@ -20,7 +20,13 @@ export default {
             this.$emit('input',!this.value);
         },
         onClickBtn(path){
-            this.$router.push(path)
+            if(path){
+
+                this.$router.push(path)
+            }
+            else{
+                 this.$store.dispatch('setEditProfile');
+            }
         }
     },
     computed:{

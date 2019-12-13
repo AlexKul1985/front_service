@@ -1,16 +1,14 @@
 <template>
     <v-layout>
-        <v-flex xs10 offset-xs1 >
-            <v-card dark color="orange" >
-                <v-card-title primary-title>
-                  <div>
-                    <div class="headline font-weight-black mb-2 yellow--text"  >В работе - 10</div>
-                    <div class="headline font-weight-black mb-2 light-green--text" >Выполнено - 2</div>
-                    <div class="headline font-weight-black mb-2 red--text" >В ремонте - 2</div>
-                  </div>
-                  
-                </v-card-title>
-            </v-card>
+        <v-flex xs8 offset-xs2 >
+            <!-- <v-card > -->
+                  <bar-figure
+                  :data="figureData"
+                        
+                      
+                  :options="{responsive: true, maintainAspectRatio: false}"
+                  ></bar-figure>
+            <!-- </v-card>       -->
         </v-flex>
         <v-fab-transition>
         <v-btn
@@ -25,18 +23,27 @@
         </v-btn>
        </v-fab-transition>
     </v-layout>
+</template>
       
           
           
             
         
      
-</template>
 <script>
+
+import BarFigure from '../components/ChartFigure'
+
 export default {
-    created(){
-        // this.$router.push('/login')
+  components:{
+    BarFigure
+  },
+  computed:{
+    figureData(){
+      return this.$store.getters.figureData;
     }
+  }  
 }
 </script>
+
 

@@ -6,8 +6,8 @@
         <Drawer v-model="drawer" :list="listMenu"/>
         <Toolbar v-model="drawer" :list="listMenu"/>
         <Content>
-            <transition appear mode="out-in" name="fade">
-                <router-view></router-view>
+            <transition appear mode="out-in" name="fade" >
+                <router-view ></router-view>
             </transition>
         </Content>
         <!-- <v-footer color="indigo" app>
@@ -15,6 +15,7 @@
         </v-footer> -->
     </v-container>
     </v-app>
+    
 </div>
     </transition>
 
@@ -40,7 +41,14 @@ export default {
         listMenu(){
             return this.$store.getters.listMenu;
         }
+    },
+    methods:{
+    
     }
    
 }
 </script>
+<style >
+
+</style>
+

@@ -6,32 +6,22 @@
             v-model="valid"
             validation
           >
-         <v-layout row wrap>
-             <v-flex xs10 offset-xs1>
-                  <v-radio-group v-model="activeVariant">
-                    <v-radio
-                    v-for="variant in variantsService"
-                    :key="variant.id"
-                    :label="variant.label"
-                    :value="variant.id"
-                    ></v-radio>
-                </v-radio-group>
-             </v-flex>
-         </v-layout>
+       
   
         
   
          
   
         <v-layout row wrap>
-            <v-flex xs10 offset-xs1  d-flex>
+         <v-flex xs10 offset-xs1  d-flex>
           <v-select
             :items="types"
             label="Выбирете тип изделия"
             solo
-           
+            :item-text="'type_name'"
             :disabled="new_type_flag"
             :rules="typeRules"
+            :item-value="'id_type'"
             v-model="activeType"
           ></v-select>
         </v-flex> 
@@ -67,7 +57,7 @@
              </v-flex>
         </v-layout>
     </v-form>
-         
+        
   
       </v-container>
     
@@ -80,20 +70,10 @@ export default {
     data(){
         return {
             valid:false,
-            variantsService:
-            [
-                {
-                    id:1,
-                    label:'Производство'
-                },
-                {
-                    id:2,
-                    label:'Командировки'
-                }
-            ],
-            activeVariant: 1,
-            types: ['Плата', 'Ячейка', 'Стойка', 'Изделие'],
-            new_type_flag: true,
+           
+           
+            // types: [{id:1,type:'Плата'}, {id:2, type:'Ячейка'}, {id:3, type:'Стойка'},{id:4, type: 'Изделие'}],
+            new_type_flag: false,
             activeType: null,
             activeName: null,
             new_type: "",
@@ -101,9 +81,9 @@ export default {
             typeRules:[
                v => (!ctx.new_type_flag && !!v) ||
                 (ctx.new_type_flag && (!!v || !v)) ||
-                 
                  'Type is required',
             ],
+                 
             nameRules:[
                v => !!v || 'Name is required',
             ],
@@ -121,35 +101,53 @@ export default {
     mounted(){
         console.log(ctx.$refs.from)
     },
-
+   
+    computed:{
+       types(){
+        return this.$store.getters.typesService;
+      }
+    },
             
             
     methods:{
         onChangeTypeFlag(value){
-            if(!value) this.$refs.form.resetValidation()
+             this.$refs.form.resetValidation()
         },
             
-        onSubmit () {
+        async onSubmit () {
             if (this.$refs.form.validate()) {
                 
                 let newTypeFlag = this.new_type_flag && this.new_type !== "" ? true : false;
-                let type = newTypeFlag ? this.new_type : this.activeType;
+                let type_name = newTypeFlag ? this.new_type : this.activeType;
 
                 let dataSubmit = {
-                    type,
-                    name:this.activeName,
-                    variant:this.activeVariant,
-                    newTypeFlag
+                    type_name,
+                    malf_name:this.activeName,
+                    
+                    newTypeFlag,
+                    // id_user:7
                 }
             
             console.log('data - ',dataSubmit)
+           await this.$store.dispatch('createType',dataSubmit)
+             this.$refs.form.reset()
             
                    
     }
     }
+  },
+   beforeRouteEnter(to, from, next){
+    next((vm) => {
+    vm.$store.dispatch('setTypesService')
+
+    })
+  },
+  beforeRouteLeave(to, from,next){
+      this.$store.dispatch('clearTypesService');
+      next()
+  }
       
 
          
-  },
 }
 </script>

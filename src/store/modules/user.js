@@ -19,14 +19,14 @@ export default {
     },
     actions:{
         async login({commit},{email, password}){
-            let response = await fetch(`http://localhost:3000/auth`,{
+            let response = await fetch(`http://test_nginx.local/auth`,{
                 method:'POST',
                 body:JSON.stringify({
                     "email":email,
                     "password":password
                 }),
                 headers:{
-                    
+                    "Content-Type":'application/json'
                 }
             })
             let data = await response.json()
@@ -35,7 +35,7 @@ export default {
             return data;
         },
         async register({commit},{email,password}){
-            let response = await fetch(`http://localhost:3000/reg`,{
+            let response = await fetch(`http://test_nginx.local/reg`,{
                 method:'POST',
                 body:JSON.stringify({
                     "email":email,

@@ -1,13 +1,17 @@
  
 <template>
-    <v-container fluid grid-list-xl>
+    <v-container fluid grid-list-xl >
       <add-form 
           v-model="text"
-          :statuses="statuses"
+          :statuses="fullInfo.statuses"
+          :variants="fullInfo.variants"
           :names="names"
-          :types="types"
-          :trigger.sync = "onClick"
+          :types="fullInfo.types"
+          :triggerSubmit = "triggerFlag"
+           :flagAddMalf="true"
           @changeValid="onValid"
+          @onChangeIdType = "getIdType"
+          :method="'POST'"
       ></add-form>
       <v-layout>
          <v-flex xs10 offset-xs1>
@@ -28,53 +32,67 @@
   
  
 import AddForm from '../components/AddForm'
-import {provide} from '../providers/onSubmit'
+import onSubmit from '../provides/onSubmit'
+
 
 
 export default {
-    provide,
+    provide: () => {
+      return {
+        onSubmit
+      }
+    },
     components:{
       AddForm
     },
     data () {
       return {
         
-       onClick:false,
-       validate:false,
-        names: ['Плата ЦОС-ПРМ', 'Плата ЦОС-ПРД', 'Изделие РАЗМАХ-4КВ', 'Модуль МСОА'],
+        triggerFlag:false,
+        validate:false,
         text:'',
-         statuses:[
-            {
-                id:1,
-                label:'В работе'
-            },
-            {
-                 id:2,
-                label:'Выполнено'
-            },
-            {
-                 id:3,
-                label:'В ремонте'
-            }
-            ],
+      
+        
+      }
+  },
+  
+  computed:{
+    fullInfo(){
+      return this.$store.getters.fullInfo;
+    },
+    names(){
+      return this.$store.getters.namesService;
+    }
+  },          
             
-            
-            types: ['Плата', 'Ячейка', 'Стойка', 'Изделие'],
           
             
-      }
 
-  },
   methods:{
-   
+  
     onValid(value){
       this.validate = value
     },
     onSubmit () {
-      this.onClick = !this.onClick;
+      this.triggerFlag = !this.triggerFlag;
     },
-   
+    getIdType(id_type){
+     this.$store.dispatch('setNamesService',id_type)
+
+    }
   },
+    
+  beforeRouteEnter(to, from, next){
+    next((vm) => {
+      vm.$store.dispatch('setfullInfo')
+    })
+  }
+
+    
+      
+   
+         
+   
   
   
 

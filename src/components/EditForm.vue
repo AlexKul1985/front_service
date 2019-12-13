@@ -13,10 +13,16 @@
                     :statuses="statuses"
                     :names="names"
                     :types="types"
-                    :trigger.sync = "onClick"
+                    :variants="variants"
+                    :triggerSubmit = "triggerFlag"
                     @changeValid="onValid"
+                    :method="'PUT'"
+                    :closeFunction = "close"
+                     @onChangeIdType = "$event => $emit('onChangeIdType',$event)"
                 ></add-form>
              </v-container>
+                   
+                    
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -30,55 +36,96 @@
 </template>
 <script>
 import AddForm from './AddForm'
-import {provide} from '../providers/onSubmit'
+import onSubmit from '../provides/onSubmit'
 
 
 export default {
-  
-  provide,
-  
+  name:'EditForm',
+    provide: function() {
+      return {
+        onSubmit,
+        close:this.close
+
+      }
+    },
   components:{
     AddForm
   },  
   data: () => ({
-    onClick: false,
+    triggerFlag: false,
     
     validate:false,
     editText:'',
-    editDialog:false,
-
-
-        
+    editDialog:false
     }),
-    props:['text','statuses','names','types','dialog'],
-    methods:{
-         close () {
-      // this.$refs.form.reset();
-            this.editDialog = false
-            this.$emit('update:dialog',this.editDialog)
-        },
-        onValid(value){
-            this.validate = value
-        },
-     
+    
+    props:['text','statuses','names','types','dialog','variants'],
+    props:{
+      text:{
+        type: String,
+        default:''
+      },
+      statuses:{
+        required:true,
+        type: Array
+      },
+      names:{
+        required:true,
+        type: Array
+      },
+      types:{
+        required:true,
+        type: Array
 
+      },
+      dialog:{
+        required:true,
+        type: Boolean
+      },
+      variants:{
+        required:true,
+        type: Array
+      }
+    },
+    methods:{
+       
+    close () {
+        this.editDialog = false
+        
+    },
+    onValid(value){
+        this.validate = value
+    },
+           
     save () {
-     
       this.close()
     },
-     onSubmit () {
-      this.onClick = !this.onClick;
-        this.close()
+           
      
+
+     
+       onSubmit () {
+       this.triggerFlag = !this.triggerFlag;
+      //  this.close();
+     
+      },
     },
-    },
+   
     watch:{
         text(value){
             this.editText = value
         },
         dialog(value){
-            // console.log('dialog',value);
-            this.editDialog = value
+            
+             this.editDialog = value;
+             
+        },
+        editDialog(value){
+          console.log('EDIT DIALOG',value)
+          if(value){
+            this.$store.dispatch('setOldstatus')
+          }
+          this.$emit('update:dialog',value)
         }
     }
     

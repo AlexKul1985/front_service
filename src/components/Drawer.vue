@@ -36,7 +36,14 @@ export default {
     },
     methods:{
         onClick(path){
+          if(path){
+
             this.$router.push(path);
+          }
+
+          else{
+            this.$store.dispatch('setEditProfile');
+          }
         },
         onInput(v){
           this.$emit('input',v);

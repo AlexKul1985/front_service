@@ -13,19 +13,27 @@ export default {
             path:'/serviceslist',
             icon:'build'
             },
+            // {
+            // id:3,
+            // title:'add malfunction',
+            // path:'/addmalf',
+            // icon:'add'
+            // },
             {
-            id:3,
-            title:'add malfunction',
-            path:'/addmalf',
-            icon:'add'
-            },
-            {
-                id:4,
+                id:3,
                 title:'CREATE SERVICE',
                 path:'/createservice',
                 icon:'create'
-                }              
+            },
+            {
+                id:4,
+                title:'EDIT PROFILE',
+                path:'',
+                icon:'create'
+            },
         ]      
+              
+                              
     },
     getters:{
         listMenu(state){

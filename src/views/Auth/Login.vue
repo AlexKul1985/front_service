@@ -2,7 +2,7 @@
 <v-app id="inspire">
     <v-container>
          <v-layout row>
-            <v-flex xs10 offset-xs1 sm8 offset-sm2>
+            <v-flex xs12 offset-xs1 sm8 offset-sm2>
             <v-card class="elevation-12">
               <v-toolbar dark color="indigo">
                 <v-toolbar-title>Login form</v-toolbar-title>
